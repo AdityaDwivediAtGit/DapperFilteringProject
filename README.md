@@ -1,9 +1,10 @@
 # Dapper Filtering Project
+![image](https://github.com/AdityaDwivediAtGit/DapperFilteringProject/assets/162092463/8435b8f2-4f4d-4be9-921c-52ee1c1f72ce)
 
 
 ## Overview
 
-This project, named "DapperFilteringProject," is a demonstration of implementing filtering and pagination features in a shopping website using Dapper and ASP.NET Core MVC. It includes a generic repository class for database operations, CRUD functionality, and filtering products based on different criteria.
+This project is a demonstration of implementing `filtering` and `pagination` features in a shopping website using Dapper and ASP.NET Core MVC. It includes a generic repository class for database operations, CRUD functionality, and filtering products based on different criteria.
 
 ---
 
@@ -16,7 +17,6 @@ This project, named "DapperFilteringProject," is a demonstration of implementing
 - [Examples](#examples)
 - [Issues](#issues)
 - [Contributing](#contributing)
-- [License](#license)
 
 ---
 
@@ -36,7 +36,7 @@ To get started with this project, follow these steps:
 1. Clone the repository: `git clone https://github.com/AdityaDwivediAtGit/DapperFilteringProject`
 2. Open the solution file `LearningFiltersShoppingDemo.sln` in Visual Studio.
 3. Configure the database connection string in `appsettings.json`.
-4. Run the project to see the filters in action.
+4. Run the project and visit for eg. https://localhost:7163/Product to see the Product filters in action.
 
 ---
 
