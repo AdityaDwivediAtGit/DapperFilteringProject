@@ -33,7 +33,7 @@ This project, named "DapperFilteringProject," is a demonstration of implementing
 
 To get started with this project, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/your-username/DapperFilteringProject.git`
+1. Clone the repository: `git clone https://github.com/AdityaDwivediAtGit/DapperFilteringProject`
 2. Open the solution file `LearningFiltersShoppingDemo.sln` in Visual Studio.
 3. Configure the database connection string in `appsettings.json`.
 4. Run the project to see the filters in action.
@@ -89,14 +89,13 @@ The project includes the following data files:
 
 ## Issues
 
-If you encounter any issues or have suggestions for improvement, please [open an issue](https://github.com/your-username/DapperFilteringProject/issues).
+If you encounter any issues or have suggestions for improvement, please [open an issue](https://github.com/AdityaDwivediAtGit/DapperFilteringProject/issues).
 
 ---
 
 ## Contributing
 
 Contributions are welcome! Please fork the repository and create a pull request with your improvements.
-
 
 
 ---
