@@ -41,7 +41,7 @@ To get started with this project, follow these steps:
 ---
 
 ## Usage 
-*Note: You dont need to use both Expression and Filter. It's just a flexibility that this project provides you to use either the expression (Lambda Fn) or the SQL Stored Procedure*
+*Note: You have the flexibility to choose between using either an Expression (Lambda Function) or a SQL Stored Procedure for filtration in this project. You don't need to use both. If your dataset is large, using a Stored Procedure for filtration is recommended as it allows for filtering directly in the database. However, if your database is small, using a Lambda expression is more flexible and suitable.*
 
 ### Lambda Function in Controller
 ```csharp
