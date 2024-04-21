@@ -1,7 +1,3 @@
-Here is a template for your GitHub README for the "DapperFilteringProject" showcasing your skills and project details:
-
----
-
 # Dapper Filtering Project
 
 
