@@ -40,7 +40,8 @@ To get started with this project, follow these steps:
 
 ---
 
-## Usage
+## Usage 
+*Note: You dont need to use both Expression and Filter. It's just a flexibility that this project provides you to use either the expression (Lambda Fn) or the SQL Stored Procedure*
 
 ### Lambda Function in Controller
 ```csharp
