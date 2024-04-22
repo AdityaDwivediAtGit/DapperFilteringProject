@@ -27,14 +27,26 @@ namespace LearningFiltersShoppingDemo.MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Filter(int page = 1, int pageSize = 10, string categoryId = "", decimal minPrice = 0, decimal maxPrice = decimal.MaxValue)
+        public IActionResult Filter(int page = 1, int pageSize = 10, int categoryId = -1, decimal minPrice = 0, decimal maxPrice = decimal.MaxValue)
         {
-            Expression<Func<Products, bool>> filter = p =>
-                (string.IsNullOrEmpty(categoryId) || p.CategoryId == int.Parse(categoryId)) &&
-                (p.Price >= minPrice && p.Price <= maxPrice);
+            //Expression<Func<Products, bool>> filter = p =>
+            //    (string.IsNullOrEmpty(categoryId) || p.CategoryId == int.Parse(categoryId)) &&
+            //    (p.Price >= minPrice && p.Price <= maxPrice);
+
+            Expression<Func<Products, bool>> filter = null;
+
+            if (categoryId != -1)
+            {
+                filter = p => (p.CategoryId == categoryId) && (p.Price >= minPrice && p.Price <= maxPrice);
+            }
+            else
+            {
+                filter = p => (p.Price >= minPrice && p.Price <= maxPrice);
+            }
 
             //var categoryIdConstant = Expression.Constant(categoryId);
             //Expression<Func<Products, bool>> filter = p => ((p.CategoryId == (int)categoryIdConstant.Value) && (p.Price >= 2 && p.Price <= 200));
+            //Expression<Func<Products, bool>> filter = p => ((p.CategoryId == 2) && (p.Price >= minPrice && p.Price <= 200));
 
             var filteredProducts = _productRepository.GetFiltered(filter)
                                                      .Skip((page - 1) * pageSize)

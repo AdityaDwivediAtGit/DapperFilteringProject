@@ -6,6 +6,7 @@ using System.Linq;
 using System;
 using DapperExtensions;
 using Dapper.SqlGenerator;
+using System.Reflection;
 
 namespace LearningFiltersShoppingDemo.MVC.Repository;
 
@@ -82,9 +83,9 @@ public class GenericRepo<T>
 
         ////return GetAll().Where(filter);
         #region Method 1: Fetching all database first, then filtering. [works fine, but not with large databases because Dapper does not support IQueryable]
-        var query = _connection.Query<T>("SELECT * FROM " + typeof(T).Name);
-        var result = query.Where(filter.Compile());
-        return result.AsQueryable();
+        //var query = _connection.Query<T>("SELECT * FROM " + typeof(T).Name);
+        //var result = query.Where(filter.Compile());
+        //return result.AsQueryable();
         #endregion
         ////return query.Where(filter.Compile()).AsQueryable();
 
@@ -108,11 +109,11 @@ public class GenericRepo<T>
         #endregion
 
         #region Method 4: [Manual Approach] Writing logic, Since Dapper does not supports IQueryable directly, and other NuGet packages have some or the other issues
-        //var tableName = typeof(T).Name;
-        //var whereClause = filter != null ? $"WHERE {GetSqlWhereClause(filter)}" : "";
-        //var query = $"SELECT * FROM {tableName} {whereClause}";
+        var tableName = typeof(T).Name;
+        var whereClause = filter != null ? $"WHERE {GetSqlWhereClause(filter)}" : "";
+        var query = $"SELECT * FROM {tableName} {whereClause}";
 
-        //return _connection.Query<T>(query).AsQueryable();
+        return _connection.Query<T>(query).AsQueryable();
         #endregion
     }
 
@@ -120,7 +121,15 @@ public class GenericRepo<T>
 
     private string GetSqlWhereClause(Expression<Func<T, bool>> filter)
     {
+        //Console.WriteLine($"{new Visitor().Visit(filter)}");
+        #region Converting to expression vars to numbers
+        //var filterCleaned = new Visitor().Visit(filter);
+        #endregion
+
+        //return GetSqlWhereClauseFromExpression(filterCleaned);
         return GetSqlWhereClauseFromExpression(filter.Body);
+
+
         //var entityRepository = new EntityRepository<T>(_connection);
         //var sqlWhereClause = entityRepository.GetSqlWhereClause(filter);
 
@@ -170,8 +179,39 @@ public class GenericRepo<T>
         }
         else if (expression is MemberExpression memberExpression)
         {
-            var propertyName = memberExpression.Member.Name;
-            return propertyName;
+            if (memberExpression.Expression is ConstantExpression constantExpression)
+            {
+                // Handle expressions like value(LearningFiltersShoppingDemo.MVC.Controllers.ProductController+<>c__DisplayClass5_0).minPrice
+                //var instance = constantExpression.Value;
+                //var property = instance.GetType().GetProperty(memberExpression.Member.Name);
+                //var value = property.GetValue(instance);
+                //return value.ToString(); // Assuming value is not null
+
+                //var value = new Visitor().Visit(memberExpression);
+
+                //var value = new Visitor().GetConstantValue(constantExpression);
+                //return value.ToString();
+
+                object container = ((ConstantExpression)constantExpression).Value;
+                var member = memberExpression.Member;
+                if (member is FieldInfo)
+                {
+                    object value = ((FieldInfo)member).GetValue(container);
+                    //return Expression.Constant(value);
+                    return value.ToString();
+                }
+                if (member is PropertyInfo)
+                {
+                    object value = ((PropertyInfo)member).GetValue(container, null);
+                    return value.ToString();
+                }
+            }
+            else
+            {
+                // Handle normal member expressions like p.minPrice
+                var propertyName = memberExpression.Member.Name;
+                return propertyName;
+            }
         }
         else if (expression is ConstantExpression constantExpression)
         {
