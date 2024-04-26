@@ -169,12 +169,42 @@ public class GenericRepo<T>
                 var propertyName = member.Member.Name;
                 return $"{propertyName} IS NULL OR {propertyName} = ''";
             }
+            //else if (methodCallExpression.Method.Name == "Parse")
+            //{
+            //    var member = (MemberExpression)methodCallExpression.Arguments[0];
+            //    var propertyName = member.Member.Name;
+            //    var value = ((ConstantExpression)methodCallExpression.Arguments[1]).Value; // Corrected index to 1
+            //    return $"{propertyName} = {value}";
+            //}
+            //else if (methodCallExpression.Method.Name == "Parse")
+            //{
+            //    var member = (MemberExpression)methodCallExpression.Arguments[0];
+            //    var propertyName = member.Member.Name;
+            //    var argExpression = methodCallExpression.Arguments[1];
+            //    var value = GetParsedValue(argExpression);
+            //    return $"{propertyName} = {value}";
+            //}
             else if (methodCallExpression.Method.Name == "Parse")
             {
                 var member = (MemberExpression)methodCallExpression.Arguments[0];
                 var propertyName = member.Member.Name;
-                var value = ((ConstantExpression)methodCallExpression.Arguments[0]).Value; // Corrected index to 1
-                return $"{propertyName} = {value}";
+
+                //converting first char capital, i.e. "categoryId" that is local var to "CategoryId" that is a parameter of Products class (model)
+                propertyName = char.ToUpper(propertyName[0]) + propertyName.Substring(1);
+
+                // Assuming propertyName corresponds to a property in your model
+                var propertyType = typeof(T).GetProperty(propertyName)?.PropertyType;
+                if (propertyType != null)
+                {
+                    // Get the argument of the Parse method
+                    var argExpression = methodCallExpression.Arguments[0];
+                    var argValue = Expression.Lambda(argExpression).Compile().DynamicInvoke();
+
+                    // Convert the argument to the property type
+                    var parsedValue = Convert.ChangeType(argValue, propertyType);
+
+                    return $"{parsedValue}";
+                }
             }
         }
         else if (expression is MemberExpression memberExpression)
@@ -242,6 +272,53 @@ public class GenericRepo<T>
             default: throw new NotSupportedException($"The operator '{nodeType}' is not supported.");
         }
     }
+
+    //private object GetParsedValue(Expression expression)
+    //{
+    //    if (expression is ConstantExpression constantExpression)
+    //    {
+    //        return constantExpression.Value;
+    //    }
+    //    else if (expression is MemberExpression memberExpression)
+    //    {
+    //        var container = GetConstantValue(memberExpression.Expression);
+    //        var member = memberExpression.Member;
+    //        if (member is FieldInfo field)
+    //        {
+    //            return field.GetValue(container);
+    //        }
+    //        else if (member is PropertyInfo property)
+    //        {
+    //            return property.GetValue(container, null);
+    //        }
+    //    }
+
+    //    throw new NotSupportedException($"Expression of type '{expression.GetType().Name}' is not supported for parsing.");
+    }
+
+    private object GetConstantValue(Expression expression)
+    {
+        if (expression is ConstantExpression constantExpression)
+        {
+            return constantExpression.Value;
+        }
+        else if (expression is MemberExpression memberExpression)
+        {
+            var container = GetConstantValue(memberExpression.Expression);
+            var member = memberExpression.Member;
+            if (member is FieldInfo field)
+            {
+                return field.GetValue(container);
+            }
+            else if (member is PropertyInfo property)
+            {
+                return property.GetValue(container, null);
+            }
+        }
+
+        throw new NotSupportedException($"Expression of type '{expression.GetType().Name}' is not supported for parsing.");
+    }
+
 
     #endregion
 
