@@ -1,4 +1,9 @@
 # Dapper Filtering Project
+
+The project was created to convert expressions to SQL queries for efficient data filtering using Dapper in a C# project. Existing solutions like `Dapper.SqlGenerator`, `System.Linq.Dynamic.Core`, and `Dapper.TQuery` couldn't fully support this due to Dapper's limited `IQueryable` compatibility. 
+
+With a large database, fetching all data into the API for filtering was impractical. Direct database-level filtering was necessary for performance. Entity Framework was good, but couldn't be used for our specific scenario, Dapper was our only option, despite its lack of direct `IQueryable` support. I developed Custom yet `Generic` classes and methods to enable `expression-based filtering` while leveraging `Dapper`'s performance advantages.
+
 ![image](https://github.com/AdityaDwivediAtGit/DapperFilteringProject/assets/162092463/8435b8f2-4f4d-4be9-921c-52ee1c1f72ce)
 
 
