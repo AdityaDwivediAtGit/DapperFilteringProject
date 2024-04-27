@@ -77,7 +77,8 @@ INSERT INTO Products (Name, Price, CategoryId) VALUES
 
 ---- Stored PROCEDURES ----
 -- Create
-CREATE PROCEDURE SP_InsertProduct
+CREATE PROCEDURE SP_InsertProducts
+	@ProductId INT,
     @Name NVARCHAR(100),
     @Price DECIMAL(10, 2),
     @CategoryId INT
@@ -86,18 +87,21 @@ BEGIN
     INSERT INTO Products (Name, Price, CategoryId) VALUES (@Name, @Price, @CategoryId);
 END
 GO
+--Drop procedure SP_InsertProduct
+--Drop procedure SP_InsertProducts
 
 -- Read
-CREATE PROCEDURE SP_GetProduct
-    @ProductId INT
+CREATE PROCEDURE SP_GetProducts
+    @id INT
 AS
 BEGIN
-    SELECT * FROM Products WHERE ProductId = @ProductId;
+    SELECT * FROM Products WHERE ProductId = @id;
 END
 GO
+--drop PROCEDURE SP_GetProduct;
 
 -- Update
-CREATE PROCEDURE SP_UpdateProduct
+CREATE PROCEDURE SP_UpdateProducts
     @ProductId INT,
     @Name NVARCHAR(100),
     @Price DECIMAL(10, 2),
@@ -107,6 +111,7 @@ BEGIN
     UPDATE Products SET Name = @Name, Price = @Price, CategoryId = @CategoryId WHERE ProductId = @ProductId;
 END
 GO
+--drop PROCEDURE SP_UpdateProduct
 
 -- Delete
 CREATE PROCEDURE SP_DeleteProduct

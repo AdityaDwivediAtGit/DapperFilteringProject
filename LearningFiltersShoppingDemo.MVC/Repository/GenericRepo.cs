@@ -22,7 +22,8 @@ public class GenericRepo<T>
     public T Get(int id)
     {
         // Use Dapper's QueryFirstOrDefault method to execute the GetProduct stored procedure
-        return _connection.QueryFirstOrDefault<T>("SP_GetProduct", new { ProductId = id }, commandType: CommandType.StoredProcedure);
+        //return _connection.QueryFirstOrDefault<T>("SP_GetProduct", new { ProductId = id }, commandType: CommandType.StoredProcedure);
+        return _connection.QueryFirstOrDefault<T>($"SP_Get{typeof(T).Name}", new { id = id }, commandType: CommandType.StoredProcedure);
     }
 
     public IQueryable<T> GetAll()
@@ -30,16 +31,18 @@ public class GenericRepo<T>
         return _connection.Query<T>("SELECT * FROM " + typeof(T).Name).AsQueryable();
     }
 
-    public void Insert(string name, decimal price, int categoryId)
+    //public void Insert(string name, decimal price, int categoryId)
+    public void Insert(T objectToInsert)
     {
         // Use Dapper's Execute method to execute the InsertProduct stored procedure
-        _connection.Execute("SP_InsertProduct", new { Name = name, Price = price, CategoryId = categoryId }, commandType: CommandType.StoredProcedure);
+        //_connection.Execute("SP_InsertProduct", new { Name = name, Price = price, CategoryId = categoryId }, commandType: CommandType.StoredProcedure);
+        _connection.Execute($"SP_Insert{typeof(T).Name}", objectToInsert, commandType: CommandType.StoredProcedure);
     }
 
-    public void Update(int id, string name, decimal price, int categoryId)
+    public void Update(T objectToUpdate)
     {
         // Use Dapper's Execute method to execute the UpdateProduct stored procedure
-        _connection.Execute("SP_UpdateProduct", new { ProductId = id, Name = name, Price = price, CategoryId = categoryId }, commandType: CommandType.StoredProcedure);
+        _connection.Execute($"SP_Update{typeof(T).Name}", objectToUpdate, commandType: CommandType.StoredProcedure);
     }
 
     public void Delete(int id)
@@ -294,7 +297,7 @@ public class GenericRepo<T>
     //    }
 
     //    throw new NotSupportedException($"Expression of type '{expression.GetType().Name}' is not supported for parsing.");
-    }
+    //}
 
     private object GetConstantValue(Expression expression)
     {

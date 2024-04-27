@@ -1,5 +1,18 @@
 Use LearningFiltersShoppingDemoDB;
 
+CREATE TABLE BigBasketGroceries (
+    [index] INT PRIMARY KEY IDENTITY(1,1),
+    product NVARCHAR(MAX),
+    category NVARCHAR(MAX),
+    sub_category NVARCHAR(MAX),
+    brand NVARCHAR(MAX),
+    sale_price DECIMAL(10, 2),
+    market_price DECIMAL(10, 2),
+    type NVARCHAR(MAX),
+    rating DECIMAL(3, 1),
+    description NVARCHAR(MAX)
+    )
+
 CREATE PROCEDURE FilterBigBasketGroceries
     @Index INT = NULL,
     @Product NVARCHAR(MAX) = NULL,
@@ -95,3 +108,31 @@ END
 --- Test
 
 EXEC FilterBigBasketGroceries @MinRating = 4.1, @Limit = 5, @Skip = 0;
+
+
+--- CRUD 
+CREATE PROCEDURE SP_InsertBigBasketGroceries
+@Product NVARCHAR(MAX)
+AS
+BEGIN
+  -- Parse JSON string or perform any necessary data manipulation from @Product
+  DECLARE @Index INT, @Category NVARCHAR(MAX), @SubCategory NVARCHAR(MAX), 
+          @Brand NVARCHAR(MAX), @SalePrice DECIMAL(10,2), @MarketPrice DECIMAL(10,2), 
+          @Type NVARCHAR(MAX), @Rating DECIMAL(5,2), @Description NVARCHAR(MAX)
+
+  -- Implement logic to extract data from @Product and populate variables
+
+  INSERT INTO BigBasketGroceries (Product, Category, Sub_Category, Brand, Sale_Price, Market_Price, Type, Rating, Description)
+  VALUES (@Product, @Category, @SubCategory, @Brand, @SalePrice, @MarketPrice, @Type, @Rating, @Description)
+END
+
+
+CREATE PROCEDURE SP_GetBigBasketGroceries
+@id INT
+AS
+BEGIN
+  SELECT * FROM BigBasketGroceries WHERE [index] = @id;
+END
+GO
+
+--drop PROCEDURE SP_GetBigBasketGroceries
