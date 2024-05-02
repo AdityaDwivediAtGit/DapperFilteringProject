@@ -1,0 +1,67 @@
+﻿@model IEnumerable<LearningFiltersShoppingDemo.MVC.Models.BigBasketGroceries>
+
+<p>
+    <a asp-action="CreateGroceryView">Create New</a>
+</p>
+
+<form asp-action="Filter" method="post">
+    <label>Category:</label>
+    <input type="text" name="category" />
+    <br>
+    <label>Brand:</label>
+    <input type="text" name="brand" />
+    <br>
+    <label>Min Price:</label>
+    <input type="number" name="minPrice" />
+    <br>
+    <label>Max Price:</label>
+    <input type="number" name="maxPrice" />
+    <br>
+    <label>Page Number:</label>
+    <input type="number" name="page" />
+    <br>
+    <label>Page Size:</label>
+    <input type="number" name="pageSize" />
+    <br>
+    <button type="submit">Filter</button>
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th> @Html.DisplayNameFor(model => model.Index) </th>
+            <th> @Html.DisplayNameFor(model => model.Product) </th>
+            <th> @Html.DisplayNameFor(model => model.Category) </th>
+            <th> @Html.DisplayNameFor(model => model.Sub_Category) </th>
+            <th> @Html.DisplayNameFor(model => model.Brand) </th>
+            <th> @Html.DisplayNameFor(model => model.Sale_Price) </th>
+            <th> @Html.DisplayNameFor(model => model.Market_Price) </th>
+            <th> @Html.DisplayNameFor(model => model.Type) </th>
+            <th> @Html.DisplayNameFor(model => model.Rating) </th>
+            <th> @Html.DisplayNameFor(model => model.Description) </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td> @Html.DisplayFor(modelItem => item.Index) </td>
+            <td> @Html.DisplayFor(modelItem => item.Product) </td>
+            <td> @Html.DisplayFor(modelItem => item.Category) </td>
+            <td> @Html.DisplayFor(modelItem => item.Sub_Category) </td>
+            <td> @Html.DisplayFor(modelItem => item.Brand) </td>
+            <td> @Html.DisplayFor(modelItem => item.Sale_Price) </td>
+            <td> @Html.DisplayFor(modelItem => item.Market_Price) </td>
+            <td> @Html.DisplayFor(modelItem => item.Type) </td>
+            <td> @Html.DisplayFor(modelItem => item.Rating) </td>
+            <td> @Html.DisplayFor(modelItem => item.Description) </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.Index }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Index }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Index })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

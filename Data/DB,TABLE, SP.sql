@@ -114,13 +114,14 @@ GO
 --drop PROCEDURE SP_UpdateProduct
 
 -- Delete
-CREATE PROCEDURE SP_DeleteProduct
+CREATE PROCEDURE SP_DeleteProducts
     @ProductId INT
 AS
 BEGIN
     DELETE FROM Products WHERE ProductId = @ProductId;
 END
 GO
+--drop PROCEDURE SP_DeleteProduct
 
 -----
 select * from Products;

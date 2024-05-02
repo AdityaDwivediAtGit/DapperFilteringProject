@@ -15,11 +15,13 @@ builder.Services.AddScoped<IDbConnection>(provider =>
 });
 builder.Services.AddScoped<GenericRepo<Products>>();
 builder.Services.AddScoped<GenericRepo<Categories>>();
+builder.Services.AddScoped<GenericRepo<BigBasketGroceries>>();
 builder.Services.AddControllersWithViews()
     .AddRazorOptions(options =>
     {
         options.ViewLocationFormats.Add("/Views/Product/{0}.cshtml");
         options.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Grocery/{0}.cshtml");
         options.ViewLocationFormats.Add("/Views/{0}.cshtml");
     });
 

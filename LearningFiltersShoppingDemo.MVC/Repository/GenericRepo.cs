@@ -26,8 +26,9 @@ public class GenericRepo<T>
         return _connection.QueryFirstOrDefault<T>($"SP_Get{typeof(T).Name}", new { id = id }, commandType: CommandType.StoredProcedure);
     }
 
-    public IQueryable<T> GetAll()
+    public IQueryable<T> GetAll(int limit = -1)
     {
+        if (limit != -1) return _connection.Query<T>("SELECT TOP " + limit.ToString() + " * FROM " + typeof(T).Name).AsQueryable();
         return _connection.Query<T>("SELECT * FROM " + typeof(T).Name).AsQueryable();
     }
 
@@ -48,7 +49,8 @@ public class GenericRepo<T>
     public void Delete(int id)
     {
         // Use Dapper's Execute method to execute the DeleteProduct stored procedure
-        _connection.Execute("SP_DeleteProduct", new { ProductId = id }, commandType: CommandType.StoredProcedure);
+        //_connection.Execute("SP_DeleteProduct", new { ProductId = id }, commandType: CommandType.StoredProcedure);
+        _connection.Execute($"SP_Delete{typeof(T).Name}", new { id = id }, commandType: CommandType.StoredProcedure);
     }
 
     //public IEnumerable<T> GetPaged(int page, int pageSize)
@@ -78,7 +80,7 @@ public class GenericRepo<T>
     public IQueryable<T> GetPaged(int page, int pageSize)
     {
         int skip = (page - 1) * pageSize;
-        return GetAll().Skip(skip).Take(pageSize);
+        return GetAll(limit: pageSize).Skip(skip).Take(pageSize);
     }
 
     public IQueryable<T> GetFiltered(Expression<Func<T, bool>> filter)
@@ -231,6 +233,10 @@ public class GenericRepo<T>
                 {
                     object value = ((FieldInfo)member).GetValue(container);
                     //return Expression.Constant(value);
+                    if (value is string stringValue)
+                    {
+                        return "'"+stringValue+"'";
+                    }
                     return value.ToString();
                 }
                 if (member is PropertyInfo)

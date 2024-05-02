@@ -136,3 +136,11 @@ END
 GO
 
 --drop PROCEDURE SP_GetBigBasketGroceries
+
+CREATE PROCEDURE SP_DeleteBigBasketGroceries
+@id INT
+AS
+BEGIN
+	Delete FROM BigBasketGroceries WHERE [index] = @id;
+END
+GO
